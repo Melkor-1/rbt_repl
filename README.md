@@ -1,12 +1,15 @@
 # Red-Black Tree REPL:
 
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://https://github.com/Melkor-1/rbt_repl/edit/main/LICENSE)
+
+
 The REPL offers functionality for inserting, deleting, and searching within a 
 red-black tree, along with the capability to generate an ASCII, or a graphical, 
 representation of the tree structure in real-time.
 
 ## Building:
 
-After cloning this repository, install all the requirements in `requirements.txt`:
+After cloning this repository, install all the requirements with:
 
 ```shell
 pip install -r requirements.txt
