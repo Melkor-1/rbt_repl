@@ -1,0 +1,5 @@
+matplotlib
+pylab
+pytest
+pytest-cov
+pytest-codecov
