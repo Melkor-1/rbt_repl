@@ -5,14 +5,25 @@ import sys
 from plot import plot_tree
 from rbtree import RedBlackTree
 
+
+def search(rbt: RedBlackTree, x: str) -> None:
+    print(rbt.search(x).get_key())
+
+
+def plot(rbt: RedBlackTree) -> None:
+    plot_tree(rbt.get_root())
+
+
 COMMANDS = {
-    "insert": lambda rbt, x: rbt.insert(x),
-    "delete": lambda rbt, x: rbt.delete(x),
-    "search": lambda rbt, x: print(rbt.search(x).get_key()),
-    "print": lambda rbt: rbt.print_tree(),
-    "plot": lambda rbt: plot_tree(rbt.get_root()),
-    "exit": lambda rbt: exit(""),
+    "insert": RedBlackTree.insert,
+    "delete": RedBlackTree.delete,
+    "search": search,
+    "print": RedBlackTree.print_tree,
+    "plot": plot,
+    "exit": lambda rbt, *tokens: sys.exit(),
 }
+
+COMMANDS_LIST = ", ".join(COMMANDS)
 
 
 def repl_loop() -> None:
@@ -22,36 +33,28 @@ def repl_loop() -> None:
         try:
             line = input(">> ").rstrip()
         except EOFError:
-            exit("")
+            print()
+            sys.exit()
 
         tokens = line.split()
 
         if not tokens:
             continue
 
-        cmd = tokens[0]
+        cmd = tokens[0].casefold()
 
-        if cmd not in COMMANDS:
+        if cmd not in COMMANDS_LIST:
             print(f"Error: unknown command: {cmd}.")
             continue
 
-        if cmd in {"print", "exit", "plot"}:
-            if len(tokens) != 1:
-                print("Error: extra argument.")
-                continue
-            COMMANDS[cmd](rbt)
-            continue
-        elif len(tokens) != 2:
-            print("Error: expected 2 arguments.")
-            continue
-        COMMANDS[cmd](rbt, tokens[1])
+        try:
+            COMMANDS[cmd](rbt, *tokens[1:])
+        except TypeError:
+            print("Error: invalid number of arguments.")
 
 
 def main() -> None:
-    prompt = (
-        "Welcome to RB-Tree REPL.\n"
-        "Commands available: insert, delete, search, print, plot, exit.\n"
-    )
+    prompt = "Welcome to RB-Tree REPL.\n" f"Commands available: {COMMANDS_LIST}.\n"
 
     print(prompt)
     repl_loop()
